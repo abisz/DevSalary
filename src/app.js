@@ -7,7 +7,7 @@ d3.csv('./data/dataset_small.csv', (error, data) => {
     console.log(error);
   } else {
     const barchart = new BarChart('#barchart');
-    barchart.update(data);
+    barchart.update(data, {}, "gender");
   }
 
 });

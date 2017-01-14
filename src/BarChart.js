@@ -55,15 +55,10 @@ class BarChart {
       .attr("font-weight", "bold");
   }
 
-  update(newData) {
+  update(newData, filter, category) {
     const self = this;
 
-    const data = transformData(newData, {
-      // gender: {
-      //   type: "not",
-      //   value: "Female"
-      // }
-    }, "aliens");
+    const data = transformData(newData, filter, category);
 
     this.xscale.domain(data.keys);
     this.colorScale.domain(data.options);
@@ -100,6 +95,7 @@ class BarChart {
         self.tooltip.select("text").text(n + '(' + Math.round((d[1] - d[0]) * 100) + '%)');
       });
 
+    // Axis
     this.g.append("g")
       .attr("class", "axis axis--x")
       .attr("transform", "translate(0," + this.height + ")")
@@ -109,7 +105,7 @@ class BarChart {
       .attr("class", "axis axis--y")
       .call(d3.axisLeft(this.yscale).ticks(10, "%"));
 
-    // Draw legend
+    // Legend
     const legend = this.svg.selectAll(".legend")
       .data(data.options)
       .enter().append("g")
