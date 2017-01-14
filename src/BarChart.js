@@ -3,7 +3,7 @@ import { transformData } from './helpers';
 
 class BarChart {
 
-  constructor(container) {
+  constructor(container, xAxisValues) {
     this.margin = {
       top: 20,
       bottom: 60,
@@ -20,6 +20,8 @@ class BarChart {
 
     this.g = this.svg.append('g')
       .attr('transform', `translate(${this.margin.left}, ${this.margin.top})`);
+
+    this.xAxisValues = xAxisValues;
 
     this.xscale = d3.scaleBand()
       .rangeRound([0, this.width])
@@ -55,12 +57,12 @@ class BarChart {
       .attr("font-weight", "bold");
   }
 
-  update(newData, filter, category) {
+  update(newData, filter, category, ) {
     const self = this;
 
     const data = transformData(newData, filter, category);
 
-    this.xscale.domain(data.keys);
+    this.xscale.domain(this.xAxisValues);
     this.colorScale.domain(data.options);
 
     const categories = this.g.selectAll('.category')
@@ -80,10 +82,6 @@ class BarChart {
 
     const rectsEntered = rects.enter()
       .append('rect')
-      .attr('x', d => this.xscale(d.data.salary_midpoint))
-      .attr('y', d => this.yscale(d[1]))
-      .attr('height', d => this.yscale(d[0]) - this.yscale(d[1]))
-      .attr('width', this.xscale.bandwidth())
       .on("mouseover", () => this.tooltip.style("display", null) )
       .on("mouseout", () => this.tooltip.style("display", "none") )
       // arrow function not possible because of "this"
@@ -103,7 +101,12 @@ class BarChart {
         self.tooltip.select("text").text(n + '(' + Math.round((d[1] - d[0]) * 100) + '%)');
       });
 
-    const rectsUpdated = rects.merge(rectsEntered);
+    const rectsUpdated = rects.merge(rectsEntered)
+      .attr('x', d => this.xscale(d.data.salary_midpoint))
+      .attr('width', this.xscale.bandwidth())
+      .transition()
+      .attr('y', d => this.yscale(d[1]))
+      .attr('height', d => this.yscale(d[0]) - this.yscale(d[1]));
 
     rects.exit().remove();
 

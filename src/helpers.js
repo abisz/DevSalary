@@ -90,3 +90,14 @@ function filterData(data, filter) {
     return (d.salary_midpoint)
   });
 }
+
+export function allSalaries(data) {
+
+  const salaries = [];
+
+  data.forEach( d => {
+    if( ! salaries.includes(d.salary_midpoint) && d.salary_midpoint) salaries.push(d.salary_midpoint);
+  });
+
+  return salaries.sort( (a,b) => parseInt(a) - parseInt(b));
+}
