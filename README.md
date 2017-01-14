@@ -1,2 +1,2 @@
 # DevSalary
-## Ivan Popovic and Simob Reinsperger
+## Ivan Popovic and Simon Reinsperger

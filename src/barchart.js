@@ -17,13 +17,6 @@ const g = svg.append('g')
 
 let data_g;
 
-const tip = d3.tip()
-  .attr('class', 'd3-tip')
-  .offset([-10, 0])
-  .html(d => "<strong>Frequency:</strong> <span style='color:red'>" + d + "</span>");
-
-svg.call(tip);
-
 const xscale = d3.scaleBand()
   .rangeRound([0, width])
   .padding(0.1)
@@ -37,6 +30,23 @@ const color = d3.scaleOrdinal()
 
 const stack = d3.stack()
   .offset(d3.stackOffsetExpand);
+
+var tooltip = svg.append("g")
+  .attr("class", "tooltip")
+  .style("display", "none");
+
+tooltip.append("rect")
+  .attr("width", 30)
+  .attr("height", 20)
+  .attr("fill", "white")
+  .style("opacity", 0.5);
+
+tooltip.append("text")
+  .attr("x", 15)
+  .attr("dy", "1.2em")
+  .style("text-anchor", "middle")
+  .attr("font-size", "12px")
+  .attr("font-weight", "bold");
 
 d3.csv('./data/dataset_small.csv', (error, csv) => {
 
@@ -76,8 +86,14 @@ function update(newData) {
     .attr('y', d => yscale(d[1]))
     .attr('height', d => yscale(d[0]) - yscale(d[1]))
     .attr('width', xscale.bandwidth())
-    .on('mouseover', tip.show)
-    .on('mouseout', tip.hide);
+    .on("mouseover", () => tooltip.style("display", null) )
+    .on("mouseout", () => tooltip.style("display", "none") )
+    .on("mousemove", d => {
+      const xPosition = d3.mouse(this)[0] - 15,
+        yPosition = d3.mouse(this)[1] - 25;
+      tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
+      tooltip.select("text").text(d.y);
+    });
 
   g.append("g")
     .attr("class", "axis axis--x")
@@ -87,7 +103,7 @@ function update(newData) {
     .attr("class", "axis axis--y")
     .call(d3.axisLeft(yscale).ticks(10, "%"));
 
-  var legend = serie.append("g")
+  const legend = serie.append("g")
     .attr("class", "legend")
     .attr("transform", function(d) { var d = d[d.length - 1]; return "translate(" + (xscale(d.data.salary_midpoint) + xscale.bandwidth()) + "," + ((yscale(d[0]) + yscale(d[1])) / 2) + ")"; });
 
@@ -103,62 +119,4 @@ function update(newData) {
     .style("font", "10px sans-serif")
     .text(function(d) { return d.key; });
 
-}
-
-function transformData(data, filter, category) {
-  const groupedData = {};
-  let dataArray = [];
-
-  const filteredData = data.filter( d => {
-
-    for (const key in filter) {
-      if (filter.hasOwnProperty(key)){
-
-        if (filter[key].type === 'only') {
-          if (d[key] !== filter[key].value) return false;
-        } else if (filter[key].type === 'not') {
-          if (d[key] === filter[key].value) return false;
-        }
-      }
-    }
-
-    return (d.salary_midpoint)
-  });
-
-  let options = [], keys = [];
-
-  filteredData.forEach( d => {
-    if ( ! groupedData[d.salary_midpoint]) groupedData[d.salary_midpoint] = {};
-    if ( ! groupedData[d.salary_midpoint][d[category]]) groupedData[d.salary_midpoint][d[category]] = 0;
-    if ( d[category] && ( ! options.includes(d[category]))) options.push(d[category]);
-    groupedData[d.salary_midpoint][d[category]] += 1;
-  });
-
-  const optionsBoilerplate = {};
-
-  options.forEach( o => optionsBoilerplate[o] = 0);
-
-  for( const key in groupedData) {
-    if (groupedData.hasOwnProperty(key)) {
-      keys.push(key);
-
-      dataArray.push(
-        Object.assign(
-          {salary_midpoint: key},
-          optionsBoilerplate,
-          groupedData[key]
-        )
-      );
-    }
-  }
-
-  keys = keys.sort( (a, b) => parseInt(a) - parseInt(b));
-
-  dataArray = dataArray.sort( (a, b) => parseInt(a.salary_midpoint) - parseInt(b.salary_midpoint) );
-
-  return {
-    data: dataArray,
-    keys,
-    options
-  }
 }
