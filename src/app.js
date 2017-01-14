@@ -1,10 +1,13 @@
 import * as d3 from 'd3';
+
 import BarChart from './BarChart';
+import FilterList from './FilterList';
+
 import { allSalaries } from './helpers';
 
-let barchart;
+let barchart, filterList;
 
-let data;
+let data, filter = {}, category = 'age_range';
 
 let toggle = true;
 let salaries;
@@ -16,23 +19,33 @@ d3.csv('./data/dataset_small.csv', (error, csv) => {
     salaries = allSalaries(csv);
 
     barchart = new BarChart('#barchart', salaries);
+    filterList = new FilterList('#filter', d => {
+      delete filter[d.category];
+      update();
+    });
 
     data = csv;
-    barchart.update(csv, {}, "age_range");
+    update();
   }
 });
 
+function update() {
+  barchart.update(data, filter, category);
+  filterList.update(filter);
+}
+
 document.getElementById('btn-change').addEventListener('click', (e) => {
   if (toggle) {
-    barchart.update(data, {}, 'age_range');
+    filter = {};
   } else {
-    barchart.update(data, {
+    filter = {
       gender: {
         type: 'only',
         value: 'Female'
       }
-    }, 'age_range');
+    };
   }
-
   toggle = !toggle;
+
+  update();
 });

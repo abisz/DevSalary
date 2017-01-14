@@ -105,6 +105,7 @@ class BarChart {
       .attr('x', d => this.xscale(d.data.salary_midpoint))
       .attr('width', this.xscale.bandwidth())
       .transition()
+      // .duration(1000)
       .attr('y', d => this.yscale(d[1]))
       .attr('height', d => this.yscale(d[0]) - this.yscale(d[1]));
 
