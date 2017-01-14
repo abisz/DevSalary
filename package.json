@@ -1,0 +1,15 @@
+{
+  "name": "DevSalary",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": {
+    "url": "https://github.com/abisz/DevSalary.git",
+    "type": "git"
+  },
+  "author": "Simon Reinsperger <reinsperger.smn@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "d3": "^4.4.1",
+    "d3-tip": "^0.7.1"
+  }
+}
