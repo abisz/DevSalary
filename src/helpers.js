@@ -6,8 +6,13 @@ export function transformData(data, filter, category) {
 
   let options = [], keys = [];
 
+  const salaryMap = new Map();
+
   filteredData.forEach( d => {
-    if ( ! groupedData[d.salary_midpoint]) groupedData[d.salary_midpoint] = {};
+    if ( ! groupedData[d.salary_midpoint]) {
+      groupedData[d.salary_midpoint] = {};
+      salaryMap.set(d.salary_midpoint, d.salary_range)
+    }
     if ( ! groupedData[d.salary_midpoint][d[category]]) groupedData[d.salary_midpoint][d[category]] = 0;
     if ( d[category] && ( ! options.includes(d[category]))) options.push(d[category]);
     groupedData[d.salary_midpoint][d[category]] += 1;
@@ -23,7 +28,10 @@ export function transformData(data, filter, category) {
 
       dataArray.push(
         Object.assign(
-          {salary_midpoint: key},
+          {
+            salary_midpoint: key,
+            salary_range: salaryMap.get(key)
+          },
           optionsBoilerplate,
           groupedData[key]
         )
@@ -46,7 +54,7 @@ export function transformDataByCategory(data, filter, category) {
 
   const filteredData = filterData(data, filter);
   const groupedData = {};
-  
+
   filteredData.forEach( d => {
     if ( ! groupedData[d[category]] ) groupedData[d[category]] = 0;
     groupedData[d[category]] += 1;
@@ -93,11 +101,20 @@ function filterData(data, filter) {
 
 export function allSalaries(data) {
 
+  const midpoints = [];
   const salaries = [];
 
   data.forEach( d => {
-    if( ! salaries.includes(d.salary_midpoint) && d.salary_midpoint) salaries.push(d.salary_midpoint);
+    if (!midpoints.includes(d.salary_midpoint) && d.salary_midpoint) {
+      midpoints.push(d.salary_midpoint);
+      salaries.push({
+        midpoint: d.salary_midpoint,
+        range: d.salary_range
+      });
+    }
   });
 
-  return salaries.sort( (a,b) => parseInt(a) - parseInt(b));
+  const sorted = salaries.sort( (a, b) => parseFloat(a.midpoint) - parseFloat(b.midpoint) );
+
+  return sorted.map( e => e.range );
 }

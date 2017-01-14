@@ -6,8 +6,8 @@ class BarChart {
   constructor(container, xAxisValues) {
     this.margin = {
       top: 20,
-      bottom: 60,
-      left: 40,
+      bottom: 80,
+      left: 60,
       right: 120
     };
     this.width = 800 - this.margin.left - this.margin.right;
@@ -88,10 +88,13 @@ class BarChart {
       .on("mousemove", function(d) {
         let total = 0;
         for (const key in d.data) {
-          if (d.data.hasOwnProperty(key) && key !== 'salary_midpoint') {
+          if (d.data.hasOwnProperty(key) && key !== 'salary_midpoint' && key !== 'salary_range') {
             total += d.data[key];
           }
         }
+
+        console.log(d);
+
 
         const n = Math.ceil((d[1] - d[0]) * total);
 
@@ -102,7 +105,7 @@ class BarChart {
       });
 
     const rectsUpdated = rects.merge(rectsEntered)
-      .attr('x', d => this.xscale(d.data.salary_midpoint))
+      .attr('x', d => this.xscale(d.data.salary_range))
       .attr('width', this.xscale.bandwidth())
       .transition()
       // .duration(1000)
