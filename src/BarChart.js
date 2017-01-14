@@ -63,15 +63,23 @@ class BarChart {
     this.xscale.domain(data.keys);
     this.colorScale.domain(data.options);
 
-    const serie = this.g.selectAll('.serie')
-      .data(this.stack.keys(data.options)(data.data))
-      .enter().append('g')
-      .attr('class', 'serie')
+    const categories = this.g.selectAll('.category')
+      .data(this.stack.keys(data.options)(data.data));
+
+    const categoriesEntered = categories.enter()
+      .append('g')
+      .attr('class', 'category')
       .attr('fill', d => this.colorScale(d.key));
 
-    serie.selectAll('rect')
-      .data( d => d )
-      .enter().append('rect')
+    const categoriesUpdated = categories.merge(categoriesEntered);
+
+    categories.exit().remove();
+
+    const rects = categoriesUpdated.selectAll('rect')
+      .data( d => d );
+
+    const rectsEntered = rects.enter()
+      .append('rect')
       .attr('x', d => this.xscale(d.data.salary_midpoint))
       .attr('y', d => this.yscale(d[1]))
       .attr('height', d => this.yscale(d[0]) - this.yscale(d[1]))
@@ -95,6 +103,10 @@ class BarChart {
         self.tooltip.select("text").text(n + '(' + Math.round((d[1] - d[0]) * 100) + '%)');
       });
 
+    const rectsUpdated = rects.merge(rectsEntered);
+
+    rects.exit().remove();
+
     // Axis
     this.g.append("g")
       .attr("class", "axis axis--x")
@@ -107,24 +119,32 @@ class BarChart {
 
     // Legend
     const legend = this.svg.selectAll(".legend")
-      .data(data.options)
-      .enter().append("g")
+      .data(data.options);
+
+    const legendEntered = legend.enter()
+      .append("g")
       .attr("class", "legend")
       .attr("transform", (d, i) => "translate(" + this.margin.left + "," + ((i * 19) + this.margin.top) + ")" );
 
-    legend.append("rect")
+    legendEntered.append("rect");
+    legendEntered.append("text");
+
+    const legendUpdated = legend.merge(legendEntered);
+
+    legendUpdated.select("rect")
       .attr("x", this.width - 18)
       .attr("width", 18)
       .attr("height", 18)
-      // .style("fill", function(d, i) {return colors.slice().reverse()[i];});
       .style("fill", (d, i) => this.colorScale(d));
 
-    legend.append("text")
+    legendUpdated.select("text")
       .attr("x", this.width + 5)
       .attr("y", 9)
       .attr("dy", ".35em")
       .style("text-anchor", "start")
       .text(d => d);
+
+    legend.exit().remove();
   }
 }
 
