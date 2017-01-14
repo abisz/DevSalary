@@ -25,13 +25,15 @@ const xscale = d3.scaleBand()
 const yscale = d3.scaleLinear()
   .rangeRound([height, 0]);
 
-const color = d3.scaleOrdinal()
-  .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+// http://tristen.ca/hcl-picker/#/hlc/10/1/B66063/E9DA5D
+const colors = ["#B66063", "#BA6B87", "#AD7EA9","#9095C2","#66AACB","#41BDC3","#49CBAB","#77D58C","#AFDA6E","#E9DA5D"];
+const colorScale = d3.scaleOrdinal()
+  .range(colors);
 
 const stack = d3.stack()
   .offset(d3.stackOffsetExpand);
 
-var tooltip = svg.append("g")
+const tooltip = svg.append("g")
   .attr("class", "tooltip")
   .style("display", "none");
 
@@ -71,13 +73,13 @@ function update(newData) {
   }, "age_range");
 
   xscale.domain(data.keys);
-  color.domain(data.options);
+  colorScale.domain(data.options);
 
   const serie = g.selectAll('.serie')
     .data(stack.keys(data.options)(data.data))
     .enter().append('g')
     .attr('class', 'serie')
-    .attr('fill', d => color(d.key));
+    .attr('fill', d => colorScale(d.key));
 
   serie.selectAll('rect')
     .data( d => d )
@@ -88,11 +90,21 @@ function update(newData) {
     .attr('width', xscale.bandwidth())
     .on("mouseover", () => tooltip.style("display", null) )
     .on("mouseout", () => tooltip.style("display", "none") )
-    .on("mousemove", d => {
-      const xPosition = d3.mouse(this)[0] - 15,
-        yPosition = d3.mouse(this)[1] - 25;
+    // arrow function not possible because of "this"
+    .on("mousemove", function(d) {
+      let total = 0;
+      for (const key in d.data) {
+        if (d.data.hasOwnProperty(key) && key !== 'salary_midpoint') {
+          total += d.data[key];
+        }
+      }
+      
+      const n = Math.ceil((d[1] - d[0]) * total);
+
+      const xPosition = d3.mouse(this)[0] - 15 + margin.left,
+        yPosition = d3.mouse(this)[1] - 25 + margin.top;
       tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
-      tooltip.select("text").text(d.y);
+      tooltip.select("text").text(n + '(' + Math.round((d[1] - d[0]) * 100) + '%)');
     });
 
   g.append("g")
@@ -103,20 +115,26 @@ function update(newData) {
     .attr("class", "axis axis--y")
     .call(d3.axisLeft(yscale).ticks(10, "%"));
 
-  const legend = serie.append("g")
+  // Draw legend
+  const legend = svg.selectAll(".legend")
+    .data(data.options)
+    .enter().append("g")
     .attr("class", "legend")
-    .attr("transform", function(d) { var d = d[d.length - 1]; return "translate(" + (xscale(d.data.salary_midpoint) + xscale.bandwidth()) + "," + ((yscale(d[0]) + yscale(d[1])) / 2) + ")"; });
+    .attr("transform", (d, i) => "translate(" + margin.left + "," + ((i * 19) + margin.top) + ")" );
 
-  legend.append("line")
-    .attr("x1", -6)
-    .attr("x2", 6)
-    .attr("stroke", "#000");
+  legend.append("rect")
+    .attr("x", width - 18)
+    .attr("width", 18)
+    .attr("height", 18)
+    // .style("fill", function(d, i) {return colors.slice().reverse()[i];});
+    .style("fill", (d, i) => colorScale(d));
 
   legend.append("text")
-    .attr("x", 9)
-    .attr("dy", "0.35em")
-    .attr("fill", "#000")
-    .style("font", "10px sans-serif")
-    .text(function(d) { return d.key; });
+    .attr("x", width + 5)
+    .attr("y", 9)
+    .attr("dy", ".35em")
+    .style("text-anchor", "start")
+    .text(d => d);
 
 }
+
