@@ -1,3 +1,6 @@
+import * as d3 from 'd3';
+import { transformData } from './helpers';
+
 const margin = {
     top: 20,
     bottom: 60,
@@ -96,7 +99,7 @@ function update(newData) {
           total += d.data[key];
         }
       }
-      
+
       const n = Math.ceil((d[1] - d[0]) * total);
 
       const xPosition = d3.mouse(this)[0] - 15 + margin.left,

@@ -6,9 +6,29 @@
     "url": "https://github.com/abisz/DevSalary.git",
     "type": "git"
   },
+  "scripts": {
+    "build": "grunt",
+    "start": "grunt start"
+  },
   "author": "Simon Reinsperger <reinsperger.smn@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "d3": "^4.4.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-preset-es2015": "^6.18.0",
+    "babelify": "^7.3.0",
+    "grunt": "^1.0.1",
+    "grunt-browserify": "^5.0.0",
+    "grunt-cli": "^1.2.0",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-connect": "^1.0.2",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "load-grunt-tasks": "^3.5.2",
+    "serve-static": "^1.11.1",
+    "time-grunt": "^1.4.0",
+    "uglifyify": "^3.0.4"
   }
 }

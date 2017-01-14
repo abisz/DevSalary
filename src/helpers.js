@@ -1,4 +1,4 @@
-function transformData(data, filter, category) {
+export function transformData(data, filter, category) {
   const groupedData = {};
   let dataArray = [];
 
@@ -42,7 +42,7 @@ function transformData(data, filter, category) {
   }
 }
 
-function transformDataByCategory(data, filter, category) {
+export function transformDataByCategory(data, filter, category) {
 
   const filteredData = filterData(data, filter);
   const groupedData = {};
