@@ -7,7 +7,7 @@ const margin = {
   width = 800 - margin.left - margin.right,
   height = 600 - margin.top - margin.bottom;
 
-const svg = d3.select('body')
+const svg = d3.select('#barchart')
   .append('svg')
   .attr('width', width + margin.left + margin.right)
   .attr('height', height + margin.top + margin.bottom);
@@ -63,14 +63,12 @@ d3.csv('./data/dataset_small.csv', (error, csv) => {
 
 function update(newData) {
 
-  console.log(newData[1]);
-
   const data = transformData(newData, {
-    gender: {
-      type: "not",
-      value: "Female"
-    }
-  }, "age_range");
+    // gender: {
+    //   type: "not",
+    //   value: "Female"
+    // }
+  }, "aliens");
 
   xscale.domain(data.keys);
   colorScale.domain(data.options);
