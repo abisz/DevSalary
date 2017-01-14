@@ -27,6 +27,11 @@ module.exports = function(grunt) {
         options: {
           transform: ['babelify', 'uglifyify']
         }
+      },
+      options: {
+        browserifyOptions: {
+          debug: true
+        }
       }
     },
 
