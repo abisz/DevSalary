@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import bubblechart from './bubblechart';
+import BubbleChart from './BubbleChart';
 import BarChart from './BarChart';
 import FilterList from './FilterList';
 
