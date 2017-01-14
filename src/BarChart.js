@@ -93,9 +93,6 @@ class BarChart {
           }
         }
 
-        console.log(d);
-
-
         const n = Math.ceil((d[1] - d[0]) * total);
 
         const xPosition = d3.mouse(this)[0] - 15 + self.margin.left,

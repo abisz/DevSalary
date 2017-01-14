@@ -1,13 +1,15 @@
 import * as d3 from 'd3';
+
 import bubblechart from './bubblechart';
 import BarChart from './BarChart';
 import FilterList from './FilterList';
+import CategorySlider from './CategorySlider';
 
-import { allSalaries } from './helpers';
+import { allSalaries, getCategories } from './helpers';
 
-let barchart, filterList;
+let barchart, filterList, categorySlider;
 
-let data, filter = {}, category = 'age_range';
+let data, filter = {}, active = 'age_range', categories;
 
 let toggle = true;
 let salaries;
@@ -17,7 +19,9 @@ d3.csv('./data/dataset_small.csv', (error, csv) => {
     console.log(error);
   } else {
     salaries = allSalaries(csv);
+    categories = getCategories(csv);
 
+    categorySlider = new CategorySlider('#slider', categories);
     barchart = new BarChart('#barchart', salaries);
     filterList = new FilterList('#filter', d => {
       delete filter[d.category];
@@ -30,8 +34,9 @@ d3.csv('./data/dataset_small.csv', (error, csv) => {
 });
 
 function update() {
-  barchart.update(data, filter, category);
+  barchart.update(data, filter, active);
   filterList.update(filter);
+  categorySlider.update();
 }
 
 document.getElementById('btn-change').addEventListener('click', (e) => {

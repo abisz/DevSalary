@@ -118,3 +118,15 @@ export function allSalaries(data) {
 
   return sorted.map( e => e.range );
 }
+
+export function getCategories(data) {
+  const categories = [];
+
+  for (const category in data[0]) {
+    if (category && data[0].hasOwnProperty(category)) {
+      categories.push(category);
+    }
+  }
+
+  return categories;
+}
