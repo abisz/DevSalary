@@ -29,11 +29,12 @@ function update(newData) {
 
     const data = transformDataByCategory(newData,
         {},
-        "age_range").data;
+        "age_range");
 
-    let root = d3.hierarchy(classes(data))
-        .sum(function(d) { return d.value; })
-        .sort(function(a, b) { return b.value - a.value; });
+    console.log(data);
+
+    let root = d3.hierarchy(classes(data.data))
+        .sum(function(d) { return d.value; });
 
     bubble(root);
     let node = svg.selectAll(".node")
@@ -43,13 +44,18 @@ function update(newData) {
         .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 
     node.append("title")
-        .text(function(d) { console.log(d.data.className); return d.data.className + ": " + format(d.value); });
+        .text(function(d) { return d.data.className + ": " + format(d.value); });
 
     node.append("circle")
-        .attr("r", function(d) { return d.r; })
+        .transition().attr("r", function(d) { return ((d.r / data.total)* 500); })
         .style("fill", function(d) {
             return color(d.data.packageName);
         });
+
+    node.append("text")
+        .attr("dy", ".3em")
+        .style("text-anchor", "middle")
+        .text(function(d) { return d.data.className.substring(0, d.r / 3); });
 
 }
 
