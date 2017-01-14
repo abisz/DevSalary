@@ -1,6 +1,6 @@
 const margin = {
     top: 20,
-    bottom: 40,
+    bottom: 60,
     left: 40,
     right: 120
   },
@@ -111,6 +111,7 @@ function update(newData) {
     .attr("class", "axis axis--x")
     .attr("transform", "translate(0," + height + ")")
     .call(d3.axisBottom(xscale));
+
   g.append("g")
     .attr("class", "axis axis--y")
     .call(d3.axisLeft(yscale).ticks(10, "%"));
@@ -137,4 +138,3 @@ function update(newData) {
     .text(d => d);
 
 }
-
