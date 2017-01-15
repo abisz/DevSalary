@@ -29,25 +29,34 @@ class BubbleChart {
 
         this.bubble(root);
         let node = this.svg.selectAll(".node")
-            .data(root.children)
-            .enter().append("g")
-            .attr("class", "node")
+            .data(root.children);
+
+        const nodeEntered = node.enter()
+            .append("g")
+            .attr("class", "node");
+
+        nodeEntered.append("title");
+        nodeEntered.append("circle")
+        nodeEntered.append("text")
+
+        const nodeUpdated = node.merge(nodeEntered)
             .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 
-        node.append("title")
+        nodeUpdated.select('title')
             .text(function(d) { return d.data.className + ": " + self.format(d.value); });
 
-        node.append("circle")
+        nodeUpdated.select("circle")
             .transition().attr("r", function(d) { return ((d.r / data.total)* 500); })
             .style("fill", function(d) {
                 return self.color(d.data.packageName);
             });
 
-        node.append("text")
+        nodeUpdated.select("text")
             .attr("dy", ".3em")
             .style("text-anchor", "middle")
             .text(function(d) { return d.data.className.substring(0, d.r / 3); });
 
+        node.exit().remove();
     }
 }
 
