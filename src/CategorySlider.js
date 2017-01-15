@@ -17,7 +17,9 @@ class CategorySlider{
     
     this.slider.html('');
 
-    this.prevBtn = this.slider.append('button')
+    this.prevBtn = this.slider.append('div')
+      .attr('class', 'slider-button')
+      .append('button')
       .attr('class', 'navBtn fa fa-arrow-left')
       .on('click', () => {
         this.index = Math.max(this.index - 1, 1);
@@ -38,7 +40,9 @@ class CategorySlider{
 
     slides.exit().remove();
 
-    this.nextBtn = this.slider.append('button')
+    this.nextBtn = this.slider.append('div')
+      .attr('class', 'slider-button')
+      .append('button')
       .attr('class', 'navBtn fa fa-arrow-right')
       .on('click', () => {
         this.index = Math.min(this.index + 1, this.categories.length - 2);
