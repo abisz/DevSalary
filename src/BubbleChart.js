@@ -49,7 +49,7 @@ class BubbleChart {
             .text(function(d) { return d.data.className + ": " + self.format(d.value); });
 
         nodeUpdated.select("circle")
-            .transition().attr("r", function(d) { return ((d.r / data.total)* 500); })
+            .transition().attr("r", function(d) { return ((d.value / data.total)* 250); })
             .style("fill", function(d) {
                 return self.color(d.data.packageName);
             });
