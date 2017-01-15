@@ -17,7 +17,7 @@ let data,
 
 let salaries;
 
-d3.csv('./data/dataset_small.csv', (error, csv) => {
+d3.csv('./data/dataset_full.csv', (error, csv) => {
   if (error) {
     console.log(error);
   } else {

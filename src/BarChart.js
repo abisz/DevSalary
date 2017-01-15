@@ -10,7 +10,7 @@ class BarChart {
       left: 60,
       right: 120
     };
-    this.width = 800 - this.margin.left - this.margin.right;
+    this.width = 1000 - this.margin.left - this.margin.right;
     this.height = 600 - this.margin.top - this.margin.bottom;
 
     this.svg = d3.select(container)
