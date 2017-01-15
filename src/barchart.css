@@ -1,3 +1,9 @@
 .axis--x g.tick text {
   transform: rotate(320deg) translate(-45px, -5px);
 }
+
+#barchart::after {
+  display: block;
+  clear: both;
+  color: '';
+}

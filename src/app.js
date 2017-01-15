@@ -50,6 +50,7 @@ function update() {
   bubblechart.update(data, filter, activeBubblechart);
   filterList.update(filter);
   categorySliderBar.update(activeBarchart);
+  categorySliderBubble.update(activeBubblechart);
 }
 
 document.getElementById('btn-change').addEventListener('click', (e) => {
