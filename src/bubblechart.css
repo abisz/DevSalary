@@ -2,3 +2,7 @@
 .node text {
   cursor: pointer;
 }
+
+.inactive{
+  opacity: .5;
+}
