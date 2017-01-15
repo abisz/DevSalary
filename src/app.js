@@ -12,7 +12,7 @@ let barchart, bubblechart, filterList, categorySliderBar, categorySliderBubble;
 let data,
   filter = {},
   categories,
-  activeBarchart = 'age_range',
+  activeBarchart = 'gender',
   activeBubblechart = 'age_range';
 
 let salaries;

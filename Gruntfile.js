@@ -93,16 +93,24 @@ module.exports = function(grunt) {
 
     watch: {
       js: {
-        files: ['./src/**/*.js', './src/**/*.hbs'],
+        files: ['./src/**/*.js'],
         tasks: ['browserify:watch'],
+        options: {
+          livereload: true
+        }
+      },
+
+      html: {
+        files: ['./src/index.html', './src/*.css'],
+        tasks: ['default'],
         options: {
           livereload: true
         }
       }
     }
-  })
+  });
 
   grunt.registerTask('default', ['clean', 'copy', 'browserify:dist'])
   grunt.registerTask('start', ['default', 'connect', 'watch'])
 
-}
+};

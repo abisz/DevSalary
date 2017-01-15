@@ -30,11 +30,8 @@ class BarChart {
 
     this.yscale = d3.scaleLinear()
       .rangeRound([this.height, 0]);
-
-    // http://tristen.ca/hcl-picker/#/hlc/10/1/B66063/E9DA5D
-    this.colors = ["#B66063", "#BA6B87", "#AD7EA9","#9095C2","#66AACB","#41BDC3","#49CBAB","#77D58C","#AFDA6E","#E9DA5D"];
-    this.colorScale = d3.scaleOrdinal()
-      .range(this.colors);
+    
+    this.colorScale = d3.scaleOrdinal(d3.schemeCategory20c);
 
     this.stack = d3.stack()
       .offset(d3.stackOffsetExpand);
@@ -57,7 +54,7 @@ class BarChart {
       .attr("font-weight", "bold");
   }
 
-  update(newData, filter, category, ) {
+  update(newData, filter, category) {
     const self = this;
 
     const data = transformData(newData, filter, category);
@@ -70,10 +67,10 @@ class BarChart {
 
     const categoriesEntered = categories.enter()
       .append('g')
-      .attr('class', 'category')
-      .attr('fill', d => this.colorScale(d.key));
+      .attr('class', 'category');
 
-    const categoriesUpdated = categories.merge(categoriesEntered);
+    const categoriesUpdated = categories.merge(categoriesEntered)
+      .attr('fill', d => this.colorScale(d.key));
 
     categories.exit().remove();
 

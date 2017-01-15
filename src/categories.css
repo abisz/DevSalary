@@ -5,9 +5,13 @@
   cursor: pointer;
   padding: 1em;
   box-sizing: border-box;
-  background-color: #f1f1f1;
 }
 
 .active {
   font-weight: bold;
+}
+
+.navBtn {
+  background-color: white;
+  border: none;
 }
