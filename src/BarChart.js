@@ -40,18 +40,6 @@ class BarChart {
       .attr("class", "tooltipBar")
       .style("display", "none");
 
-    // this.tooltip.append("rect")
-    //   .attr("width", 30)
-    //   .attr("height", 20)
-    //   .attr("fill", "white")
-    //   .style("opacity", 0.5);
-    //
-    // this.tooltip.append("text")
-    //   .attr("x", 15)
-    //   .attr("dy", "1.2em")
-    //   .style("text-anchor", "middle")
-    //   .attr("font-size", "12px")
-    //   .attr("font-weight", "bold");
   }
 
   update(newData, filter, category) {
@@ -70,7 +58,8 @@ class BarChart {
       .attr('class', 'category');
 
     const categoriesUpdated = categories.merge(categoriesEntered)
-      .attr('fill', d => this.colorScale(d.key));
+      .attr('fill', d => this.colorScale(d.key))
+      .attr('data-option', d => d.key);
 
     categories.exit().remove();
 
@@ -90,12 +79,20 @@ class BarChart {
           }
         }
 
+        // get value of hovered rect
+        // kudos to http://bl.ocks.org/juan-cb/43f10523858abf6053ae
+        const elements = document.querySelectorAll(':hover');
+        const value = elements[elements.length - 2]
+          .attributes
+          .getNamedItem('data-option').value;
+
         const n = Math.ceil((d[1] - d[0]) * total);
+        const perc = Math.round((d[1] - d[0]) * 100);
 
         self.tooltip.style("left", d3.event.pageX+15+"px");
         self.tooltip.style("top", d3.event.pageY-5+"px");
 
-        self.tooltip.html(n + '(' + Math.round((d[1] - d[0]) * 100) + '%)');
+        self.tooltip.html(value + ' (' + perc + '%)');
       });
 
     const rectsUpdated = rects.merge(rectsEntered)
