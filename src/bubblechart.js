@@ -3,7 +3,7 @@ import { transformDataByCategory } from './helpers';
 
 class BubbleChart {
 
-    constructor(container) {
+    constructor(container, clickEvent) {
 
         this.diameter = 600,
             this.format = d3.format(",d"),
@@ -17,12 +17,14 @@ class BubbleChart {
             .attr("width", this.diameter)
             .attr("height", this.diameter)
             .attr("class", "bubble");
+
+        this.clickEvent = clickEvent;
     }
 
     update(newData, filter, category){
         const self = this;
 
-        const data = transformDataByCategory(newData, filter, category);
+        const data = transformDataByCategory(newData, {}, category);
 
         let root = d3.hierarchy(classes(data.data))
             .sum(function(d) { return d.value; });
@@ -40,7 +42,8 @@ class BubbleChart {
         nodeEntered.append("text")
 
         const nodeUpdated = node.merge(nodeEntered)
-            .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+            .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+            .on("click", this.clickEvent)
 
         nodeUpdated.select('title')
             .text(function(d) { return d.data.className + ": " + self.format(d.value); });
@@ -50,6 +53,7 @@ class BubbleChart {
             .style("fill", function(d) {
                 return self.color(d.data.packageName);
             });
+
 
         nodeUpdated.select("text")
             .attr("dy", ".3em")
