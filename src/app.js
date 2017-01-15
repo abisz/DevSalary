@@ -15,7 +15,6 @@ let data,
   activeBarchart = 'age_range',
   activeBubblechart = 'age_range';
 
-let toggle = false;
 let salaries;
 
 d3.csv('./data/dataset_small.csv', (error, csv) => {
@@ -55,14 +54,3 @@ function update() {
   categorySliderBar.update(activeBarchart);
   categorySliderBubble.update(activeBubblechart);
 }
-
-document.getElementById('btn-change').addEventListener('click', (e) => {
-  if (toggle) {
-    category = "age_range";
-  } else {
-    category = "gender";
-  }
-  toggle = !toggle;
-
-  update();
-});
