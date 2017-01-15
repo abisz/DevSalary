@@ -17,35 +17,49 @@ let data,
 
 let salaries;
 
-d3.csv('./data/dataset_full.csv', (error, csv) => {
-  if (error) {
-    console.log(error);
-  } else {
-    salaries = allSalaries(csv);
-    categories = getCategories(csv);
+const DATA_URL = './data/dataset_full.csv';
 
-    categorySliderBar = new CategorySlider('#sliderBar', categories, category => {
-      activeBarchart = category;
-      update();
-    });
-    categorySliderBubble = new CategorySlider('#sliderBubble', categories, category => {
-      activeBubblechart = category;
-      update();
-    });
-    barchart = new BarChart('#barchart', salaries);
-    bubblechart = new BubbleChart('#bubblechart', d => {
+importData(DATA_URL);
+
+function importData(url, secondTry=false) {
+  d3.csv(url, (error, csv) => {
+    if (error) {
+      console.log(error);
+      // in case someone doesn't have the complete dataset,
+      // which is not checked into git due to its size
+      if ( ! secondTry) {
+        console.info('Dataset not found - smaller alternative is loaded...');
+        importData('./data/dataset_small.csv', true);
+      }
+
+    } else {
+      salaries = allSalaries(csv);
+      categories = getCategories(csv);
+
+      categorySliderBar = new CategorySlider('#sliderBar', categories, category => {
+        activeBarchart = category;
+        update();
+      });
+      categorySliderBubble = new CategorySlider('#sliderBubble', categories, category => {
+        activeBubblechart = category;
+        update();
+      });
+      barchart = new BarChart('#barchart', salaries);
+      bubblechart = new BubbleChart('#bubblechart', d => {
         filter[activeBubblechart] = {type: "only", value: d.data.packageName};
         update();
-    });
-    filterList = new FilterList('#filter', d => {
-      delete filter[d.category];
-      update();
-    });
+      });
+      filterList = new FilterList('#filter', d => {
+        delete filter[d.category];
+        update();
+      });
 
-    data = csv;
-    update();
-  }
-});
+      data = csv;
+      update();
+    }
+  });
+}
+
 
 function update() {
   barchart.update(data, filter, activeBarchart);
