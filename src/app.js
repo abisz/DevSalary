@@ -7,9 +7,13 @@ import CategorySlider from './CategorySlider';
 
 import { allSalaries, getCategories } from './helpers';
 
-let barchart, bubblechart, filterList, categorySlider;
+let barchart, bubblechart, filterList, categorySliderBar, categorySliderBubble;
 
-let data, filter = {}, categories,  activeBarchart = 'age_range', activeBubblechart = 'age_range';
+let data,
+  filter = {},
+  categories,
+  activeBarchart = 'age_range',
+  activeBubblechart = 'age_range';
 
 let toggle = false;
 let salaries;
@@ -21,10 +25,12 @@ d3.csv('./data/dataset_small.csv', (error, csv) => {
     salaries = allSalaries(csv);
     categories = getCategories(csv);
 
-    categorySlider = new CategorySlider('#slider', categories, category => {
-      console.log(category);
-
+    categorySliderBar = new CategorySlider('#sliderBar', categories, category => {
       activeBarchart = category;
+      update();
+    });
+    categorySliderBubble = new CategorySlider('#sliderBubble', categories, category => {
+      activeBubblechart = category;
       update();
     });
     barchart = new BarChart('#barchart', salaries);
@@ -43,7 +49,7 @@ function update() {
   barchart.update(data, filter, activeBarchart);
   bubblechart.update(data, filter, activeBubblechart);
   filterList.update(filter);
-  categorySlider.update(activeBarchart);
+  categorySliderBar.update(activeBarchart);
 }
 
 document.getElementById('btn-change').addEventListener('click', (e) => {

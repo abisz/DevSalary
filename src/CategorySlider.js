@@ -34,7 +34,7 @@ class CategorySlider{
 
     const slidesUpdated = slides.merge(slidesEntered)
       .text(d => d)
-      .attr('class', d => d === active ? 'active' : '')
+      .attr('class', d => 'category ' + (d === active ? 'active' : ''))
       .on('click', this.clickEvent);
 
     slides.exit().remove();
