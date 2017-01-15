@@ -35,6 +35,7 @@ class FilterList {
     const listItemsUpdated = listItems.merge(listItemsEntered);
     listItemsUpdated.select('p').text(d => (d.type === 'only' ? "✅ " : "🚫 ") + d.category + ': ' + d.value);
     listItemsUpdated.select('button').text("❌")
+      .attr('class', 'remove-btn')
       .on('click', this.clicked);
 
     listItems.exit().remove();

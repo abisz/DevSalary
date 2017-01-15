@@ -36,22 +36,22 @@ class BarChart {
     this.stack = d3.stack()
       .offset(d3.stackOffsetExpand);
 
-    this.tooltip = this.svg.append("g")
-      .attr("class", "tooltip")
+    this.tooltip = d3.select('body').append("div")
+      .attr("class", "tooltipBar")
       .style("display", "none");
 
-    this.tooltip.append("rect")
-      .attr("width", 30)
-      .attr("height", 20)
-      .attr("fill", "white")
-      .style("opacity", 0.5);
-
-    this.tooltip.append("text")
-      .attr("x", 15)
-      .attr("dy", "1.2em")
-      .style("text-anchor", "middle")
-      .attr("font-size", "12px")
-      .attr("font-weight", "bold");
+    // this.tooltip.append("rect")
+    //   .attr("width", 30)
+    //   .attr("height", 20)
+    //   .attr("fill", "white")
+    //   .style("opacity", 0.5);
+    //
+    // this.tooltip.append("text")
+    //   .attr("x", 15)
+    //   .attr("dy", "1.2em")
+    //   .style("text-anchor", "middle")
+    //   .attr("font-size", "12px")
+    //   .attr("font-weight", "bold");
   }
 
   update(newData, filter, category) {
@@ -92,17 +92,16 @@ class BarChart {
 
         const n = Math.ceil((d[1] - d[0]) * total);
 
-        const xPosition = d3.mouse(this)[0] - 15 + self.margin.left,
-          yPosition = d3.mouse(this)[1] - 25 + self.margin.top;
-        self.tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
-        self.tooltip.select("text").text(n + '(' + Math.round((d[1] - d[0]) * 100) + '%)');
+        self.tooltip.style("left", d3.event.pageX+15+"px");
+        self.tooltip.style("top", d3.event.pageY-5+"px");
+
+        self.tooltip.html(n + '(' + Math.round((d[1] - d[0]) * 100) + '%)');
       });
 
     const rectsUpdated = rects.merge(rectsEntered)
       .attr('x', d => this.xscale(d.data.salary_range))
       .attr('width', this.xscale.bandwidth())
       .transition()
-      // .duration(1000)
       .attr('y', d => this.yscale(d[1]))
       .attr('height', d => this.yscale(d[0]) - this.yscale(d[1]));
 

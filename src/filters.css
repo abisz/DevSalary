@@ -7,3 +7,8 @@ ul {
   display: inline-block;
   margin: 0.5em 1em 0.5em 0;
 }
+
+.remove-btn {
+  background-color: white;
+  border: none;
+}
