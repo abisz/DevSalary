@@ -1,14 +1,16 @@
 import * as d3 from 'd3';
 
 class CategorySlider{
-  constructor(element, categories) {
+  constructor(element, categories, clickEvent) {
 
     this.slider = d3.select(element)
       .append('div');
 
     this.categories = categories;
 
-    this.index = 5;
+    this.index = 1;
+
+    this.clickEvent = clickEvent;
   }
 
   update(active) {
@@ -19,9 +21,8 @@ class CategorySlider{
       .attr('class', 'navBtn prev')
       .text('<-')
       .on('click', () => {
-        // this.index = Math.max(this.index--, 1);
-        this.index--;
-        this.update();
+        this.index = Math.max(this.index - 1, 1);
+        this.update(active);
       });
 
     const slides = this.slider.selectAll('.slide')
@@ -32,7 +33,9 @@ class CategorySlider{
       .append('div');
 
     const slidesUpdated = slides.merge(slidesEntered)
-      .text(d => d);
+      .text(d => d)
+      .attr('class', d => d === active ? 'active' : '')
+      .on('click', this.clickEvent);
 
     slides.exit().remove();
 
@@ -40,10 +43,8 @@ class CategorySlider{
       .attr('class', 'navBtn next')
       .text('->')
       .on('click', () => {
-        // this.index = Math.min(this.index++, this.categories.length - 2);
-        this.index++;
-
-        this.update();
+        this.index = Math.min(this.index + 1, this.categories.length - 2);
+        this.update(active);
       });
   }
 }

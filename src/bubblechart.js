@@ -43,7 +43,7 @@ function update(newData) {
         .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 
     node.append("title")
-        .text(function(d) { console.log(d.data.className); return d.data.className + ": " + format(d.value); });
+        .text(function(d) { return d.data.className + ": " + format(d.value); });
 
     node.append("circle")
         .attr("r", function(d) { return d.r; })
