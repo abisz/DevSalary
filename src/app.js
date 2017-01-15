@@ -34,7 +34,10 @@ d3.csv('./data/dataset_small.csv', (error, csv) => {
       update();
     });
     barchart = new BarChart('#barchart', salaries);
-    bubblechart = new BubbleChart('#bubblechart');
+    bubblechart = new BubbleChart('#bubblechart', d => {
+        filter[activeBubblechart] = {type: "only", value: d.data.packageName};
+        update();
+    });
     filterList = new FilterList('#filter', d => {
       delete filter[d.category];
       update();
