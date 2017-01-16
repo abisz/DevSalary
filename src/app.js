@@ -39,6 +39,7 @@ function importData(url, secondTry=false) {
 
       categorySliderBar = new CategorySlider('#sliderBar', categories, category => {
         activeBarchart = category;
+        console.log(category)
         update();
       });
       categorySliderBubble = new CategorySlider('#sliderBubble', categories, category => {

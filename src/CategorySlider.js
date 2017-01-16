@@ -1,11 +1,12 @@
 import * as d3 from 'd3';
+import data_config from "../data/data_config.json"
+//TODO check import ../ vs ./
 
 class CategorySlider{
   constructor(element, categories, clickEvent) {
 
     this.slider = d3.select(element)
       .append('div');
-
 
     this.categories = categories;
 
@@ -28,14 +29,16 @@ class CategorySlider{
       });
 
     const slides = this.slider.selectAll('.slide')
-      .data(this.categories.slice(this.index - 1, this.index + 2));
+      .data(this.categories
+          .filter(c => data_config.hasOwnProperty(c))
+          .slice(this.index - 1, this.index + 2));
 
 
     const slidesEntered = slides.enter()
       .append('div');
 
     const slidesUpdated = slides.merge(slidesEntered)
-      .text(d => d)
+      .text(d => data_config[d])
       .attr('class', d => 'category ' + (d === active ? 'active' : ''))
       .on('click', this.clickEvent);
 
