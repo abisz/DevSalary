@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { transformData } from './helpers';
+import { transformData, hexToRgb } from './helpers';
 
 class BarChart {
 
@@ -40,6 +40,8 @@ class BarChart {
       .attr("class", "tooltipBar")
       .style("display", "none");
 
+    this.selectedCategory = '';
+
   }
 
   update(newData, filter, category) {
@@ -50,20 +52,9 @@ class BarChart {
     this.xscale.domain(this.xAxisValues);
     this.colorScale.domain(data.options);
 
-    const categories = this.g.selectAll('.category')
-      .data(this.stack.keys(data.options)(data.data));
+    this.updateCategories(data);
 
-    const categoriesEntered = categories.enter()
-      .append('g')
-      .attr('class', 'category');
-
-    const categoriesUpdated = categories.merge(categoriesEntered)
-      .attr('fill', d => this.colorScale(d.key))
-      .attr('data-option', d => d.key);
-
-    categories.exit().remove();
-
-    const rects = categoriesUpdated.selectAll('rect')
+    const rects = this.categoriesUpdated.selectAll('rect')
       .data( d => d );
 
     const rectsEntered = rects.enter()
@@ -71,8 +62,6 @@ class BarChart {
       // arrow function not possible because of "this"
       .on("mouseover", function(e) {
         self.tooltip.style("display", null);
-        // console.log(this);
-        // this.style('fill', '#000');
       } )
       .on("mouseout", () => this.tooltip.style("display", "none") )
       .on("mousemove", function(d) {
@@ -136,7 +125,15 @@ class BarChart {
       .attr("x", this.width - 18)
       .attr("width", 18)
       .attr("height", 18)
-      .style("fill", (d, i) => this.colorScale(d));
+      .style("fill", (d, i) => this.colorScale(d))
+      .on('mouseenter', e => {
+        this.selectedCategory = e;
+        this.updateCategories(data);
+      })
+      .on('mouseout', e => {
+        this.selectedCategory = '';
+        this.updateCategories(data);
+      });
 
     legendUpdated.select("text")
       .attr("x", this.width + 5)
@@ -147,7 +144,34 @@ class BarChart {
 
     legend.exit().remove();
   }
+
+  updateCategories(data){
+    this.categories = this.g.selectAll('.category')
+      .data(this.stack.keys(data.options)(data.data));
+
+    this.categoriesEntered = this.categories.enter()
+      .append('g')
+      .attr('class', 'category');
+
+    this.categoriesUpdated = this.categories.merge(this.categoriesEntered)
+      .attr('fill', d => {
+
+        const rgba = hexToRgb(this.colorScale(d.key));
+
+        if (this.selectedCategory) {
+          if (this.selectedCategory === d.key) {
+            return 'rgba(' + rgba.r + ',' + rgba.g + ',' + rgba.b + ',1)';
+          } else {
+            return 'rgba(' + rgba.r + ',' + rgba.g + ',' + rgba.b + ',0.25)';
+          }
+        }
+
+        return 'rgba(' + rgba.r + ',' + rgba.g + ',' + rgba.b + ',1)';
+      })
+      .attr('data-option', d => d.key);
+
+    this.categories.exit().remove();
+  }
 }
 
 export default BarChart;
-
