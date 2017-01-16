@@ -28,12 +28,18 @@ class FilterList {
       .append('li')
       .attr('class', 'filter_item');
 
+    listItemsEntered.append('span');
+
     listItemsEntered.append('p');
 
     listItemsEntered.append('button');
 
     const listItemsUpdated = listItems.merge(listItemsEntered);
-    listItemsUpdated.select('p').text(d => (d.type === 'only' ? "✅ " : "🚫 ") + d.category + ': ' + d.value);
+    listItemsUpdated.select('span')
+      .text(d => d.type === 'only' ? "✅ " : "🚫 ")
+      .on('click', e => console.log(e));
+
+    listItemsUpdated.select('p').text(d => d.category + ': ' + d.value);
     listItemsUpdated.select('button').text("❌")
       .attr('class', 'remove-btn')
       .on('click', this.clicked);
