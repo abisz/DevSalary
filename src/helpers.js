@@ -43,6 +43,7 @@ export function transformData(data, filter, category) {
 
   dataArray = dataArray.sort( (a, b) => parseInt(a.salary_midpoint) - parseInt(b.salary_midpoint) );
 
+  options.sort();
   return {
     data: dataArray,
     keys,
