@@ -68,9 +68,13 @@ class BarChart {
 
     const rectsEntered = rects.enter()
       .append('rect')
-      .on("mouseover", () => this.tooltip.style("display", null) )
-      .on("mouseout", () => this.tooltip.style("display", "none") )
       // arrow function not possible because of "this"
+      .on("mouseover", function(e) {
+        self.tooltip.style("display", null);
+        // console.log(this);
+        // this.style('fill', '#000');
+      } )
+      .on("mouseout", () => this.tooltip.style("display", "none") )
       .on("mousemove", function(d) {
         let total = 0;
         for (const key in d.data) {

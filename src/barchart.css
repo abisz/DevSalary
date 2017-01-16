@@ -21,3 +21,7 @@
   padding: 5px;
   text-align: center;
 }
+
+rect:hover {
+  fill: rgb(235, 234, 104);
+}
