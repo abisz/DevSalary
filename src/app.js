@@ -47,15 +47,17 @@ function importData(url, secondTry=false) {
       });
       barchart = new BarChart('#barchart', salaries);
       bubblechart = new BubbleChart('#bubblechart', d => {
-        filter[activeBubblechart] = {type: "only", value: d.data.packageName};
+        if (
+          filter[activeBubblechart] &&
+          filter[activeBubblechart].value === d.data.packageName
+        ) delete filter[activeBubblechart];
+        else filter[activeBubblechart] = {type: "only", value: d.data.packageName};
         update();
       });
       filterList = new FilterList('#filter', d => {
         delete filter[d.category];
         update();
       }, d => {
-        console.log(d);
-
         filter[d.category].type = d.type === 'only' ? 'not' : 'only';
         update();
       });

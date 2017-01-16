@@ -5,9 +5,9 @@ class BubbleChart {
 
     constructor(container, clickEvent) {
 
-        this.diameter = 600,
-            this.format = d3.format(",d"),
-            this.color = d3.scaleOrdinal(d3.schemeCategory20c);
+        this.diameter = 600;
+        this.format = d3.format(",d");
+        this.color = d3.scaleOrdinal(d3.schemeCategory20c);
 
         this.bubble = d3.pack()
             .size([this.diameter, this.diameter])
@@ -26,13 +26,11 @@ class BubbleChart {
 
         const data = transformDataByCategory(newData, {}, category);
 
-        let root = d3.hierarchy(classes(data.data))
-            .sum(function (d) {
-                return d.value;
-            });
+        const root = d3.hierarchy(classes(data.data))
+            .sum(d => d.value);
 
         this.bubble(root);
-        let node = this.svg.selectAll(".node")
+        const node = this.svg.selectAll(".node")
             .data(root.children);
 
 
@@ -45,10 +43,8 @@ class BubbleChart {
         nodeEntered.append("text");
 
         const nodeUpdated = node.merge(nodeEntered)
-            .attr("transform", function (d) {
-                return "translate(" + d.x + "," + d.y + ")";
-            })
-            .attr('class', function (d) {
+            .attr("transform", d => "translate(" + d.x + "," + d.y + ")")
+            .attr('class', d => {
                 if (filter.hasOwnProperty(category)) {
                     if (filter[category].value != d.data.packageName) {
                         return 'node inactive'
@@ -59,23 +55,16 @@ class BubbleChart {
             .on("click", this.clickEvent);
 
         nodeUpdated.select('title')
-            .text(function (d) {
-                return d.data.className + ": " + self.format(d.value);
-            });
+            .text( d => d.data.className + ": " + self.format(d.value));
 
         nodeUpdated.select("circle")
             .transition().attr("r", d => d.r )
-            .style("fill", function(d) {
-                return self.color(d.data.packageName);
-            });
-
+            .style("fill", d => self.color(d.data.packageName));
 
         nodeUpdated.select("text")
             .attr("dy", ".3em")
             .style("text-anchor", "middle")
-            .text(function (d) {
-                return d.data.className.substring(0, d.r / 3);
-            });
+            .text( d => d.data.className.substring(0, d.r / 3) );
 
         node.exit().remove();
     }
@@ -85,11 +74,15 @@ export default BubbleChart;
 
 // Returns a flattened hierarchy containing all leaf nodes under the root.
 function classes(root) {
-    let classes = [];
+    const classes = [];
 
-    for (let node of root) {
+    for (const node of root) {
         if (node.key) {
-            classes.push({packageName: node.key, className: node.key, value: node.value});
+            classes.push({
+                packageName: node.key,
+                className: node.key,
+                value: node.value
+            });
         }
     }
     return {children: classes};
