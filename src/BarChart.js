@@ -109,7 +109,7 @@ class BarChart {
 
     // Legend
     const legend = this.svg.selectAll(".legend")
-      .data(data.options);
+      .data(data.options.slice().reverse());
 
     const legendEntered = legend.enter()
       .append("g")
@@ -155,9 +155,7 @@ class BarChart {
 
     this.categoriesUpdated = this.categories.merge(this.categoriesEntered)
       .attr('fill', d => {
-
         const rgba = hexToRgb(this.colorScale(d.key));
-
         if (this.selectedCategory) {
           if (this.selectedCategory === d.key) {
             return 'rgba(' + rgba.r + ',' + rgba.g + ',' + rgba.b + ',1)';
@@ -165,7 +163,6 @@ class BarChart {
             return 'rgba(' + rgba.r + ',' + rgba.g + ',' + rgba.b + ',0.25)';
           }
         }
-
         return 'rgba(' + rgba.r + ',' + rgba.g + ',' + rgba.b + ',1)';
       })
       .attr('data-option', d => d.key);
