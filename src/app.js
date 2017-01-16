@@ -24,12 +24,13 @@ importData(DATA_URL);
 function importData(url, secondTry=false) {
   d3.csv(url, (error, csv) => {
     if (error) {
-      console.log(error);
       // in case someone doesn't have the complete dataset,
       // which is not checked into git due to its size
       if ( ! secondTry) {
         console.info('Dataset not found - smaller alternative is loaded...');
         importData('./data/dataset_small.csv', true);
+      } else {
+        console.log(error);
       }
 
     } else {
