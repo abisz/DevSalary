@@ -80,7 +80,7 @@ module.exports = function(grunt) {
       data: {
         expand: true,
         cwd: 'data',
-        src: '*.csv',
+        src: ['*.csv', '*.json'],
         dest: './dist/data'
       },
       dist: {
