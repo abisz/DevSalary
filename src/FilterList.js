@@ -1,11 +1,12 @@
 import * as d3 from 'd3';
 
 class FilterList {
-  constructor(container, clicked) {
+  constructor(container, remove, toggle) {
     this.list = d3.select(container)
       .append('ul');
 
-    this.clicked = clicked;
+    this.remove = remove;
+    this.toggle = toggle;
   }
 
   update(filterConfig) {
@@ -37,12 +38,12 @@ class FilterList {
     const listItemsUpdated = listItems.merge(listItemsEntered);
     listItemsUpdated.select('span')
       .text(d => d.type === 'only' ? "✅ " : "🚫 ")
-      .on('click', e => console.log(e));
+      .on('click', this.toggle);
 
     listItemsUpdated.select('p').text(d => d.category + ': ' + d.value);
     listItemsUpdated.select('button').text("❌")
       .attr('class', 'remove-btn')
-      .on('click', this.clicked);
+      .on('click', this.remove);
 
     listItems.exit().remove();
   }

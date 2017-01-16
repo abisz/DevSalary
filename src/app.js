@@ -53,6 +53,11 @@ function importData(url, secondTry=false) {
       filterList = new FilterList('#filter', d => {
         delete filter[d.category];
         update();
+      }, d => {
+        console.log(d);
+
+        filter[d.category].type = d.type === 'only' ? 'not' : 'only';
+        update();
       });
 
       data = csv;
