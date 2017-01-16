@@ -35,6 +35,13 @@ module.exports = function(grunt) {
       }
     },
 
+    concat: {
+      dist: {
+        src: ['src/*.css'],
+        dest: 'dist/style.css',
+      },
+    },
+
     clean: {
       dist: ['./dist']
     },
@@ -46,37 +53,12 @@ module.exports = function(grunt) {
           hostname: '0.0.0.0',
           livereload: true,
           open: true,
-          port: 3000,
-          // middleware: (connect, options) => {
-          //   const middlewares = []
-          //
-          //   if (!Array.isArray(options.base)) {
-          //     options.base = [options.base]
-          //   }
-          //
-          //   options.base.forEach(function(base) {
-          //     middlewares.push(serveStatic(base))
-          //   })
-          //
-          //   // default: index.html
-          //   middlewares.push((req, res) => {
-          //     fs
-          //       .createReadStream(`${options.base}/index.html`)
-          //       .pipe(res)
-          //   })
-          //   return middlewares
-          // }
+          port: 3000
         }
       }
     },
 
     copy: {
-      css: {
-        expand: true,
-        cwd: 'src',
-        src: '*.css',
-        dest: './dist/'
-      },
       data: {
         expand: true,
         cwd: 'data',
@@ -110,7 +92,7 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('default', ['clean', 'copy', 'browserify:dist'])
+  grunt.registerTask('default', ['clean', 'copy', 'concat', 'browserify:dist'])
   grunt.registerTask('start', ['default', 'connect', 'watch'])
 
 };
