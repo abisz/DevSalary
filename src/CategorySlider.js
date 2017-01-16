@@ -6,6 +6,7 @@ class CategorySlider{
     this.slider = d3.select(element)
       .append('div');
 
+
     this.categories = categories;
 
     this.index = 1;
