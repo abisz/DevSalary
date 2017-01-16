@@ -1,4 +1,5 @@
 import * as d3 from 'd3';
+import data_config from '../data/data_config.json';
 
 class FilterList {
   constructor(container, remove, toggle) {
@@ -40,7 +41,7 @@ class FilterList {
       .text(d => d.type === 'only' ? "✅ " : "🚫 ")
       .on('click', this.toggle);
 
-    listItemsUpdated.select('p').text(d => d.category + ': ' + d.value);
+    listItemsUpdated.select('p').text(d => data_config[d.category] + ': ' + d.value);
     listItemsUpdated.select('button').text("❌")
       .attr('class', 'remove-btn')
       .on('click', this.remove);
