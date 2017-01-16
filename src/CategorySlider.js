@@ -49,7 +49,8 @@ class CategorySlider{
       .append('button')
       .attr('class', 'navBtn fa fa-arrow-right')
       .on('click', () => {
-        this.index = Math.min(this.index + 1, this.categories.length - 2);
+        this.index = Math.min(this.index + 1, this.categories.filter(c => data_config.hasOwnProperty(c))
+            .length - 2);
         this.update(active);
       });
   }
