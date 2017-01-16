@@ -35,43 +35,46 @@ It should help answering questions about influences regarding wages and distribu
 
 An example task could be "How does the gender distribution among young (20-24y) developers change with rising salaries?"
 
+Concrete examples for tasks and what insights can be obtained will be described later in chapter "Insight".
+
 ## Design Concept
 Our design concept consists of four parts:
 
 ### Normalized Stacked Barchart
 This is the heart of the visualization.
-The bars each represent a salary range and show the normalized distribution of the currently active category (e.g. 'gender' or 'age range').
-The several options of a category have a consistent color and are ordered the same way within each bar.
+The bars each represent a salary range and show the normalized distribution of the currently active category (e.g. "gender" or "age range").
+The several answering options of a category have a consistent color and are ordered the same way within each bar.
 That allows the user to easily recognize trends.
 
-The x axis shows the labels of the salaries, while the y axis features ticks in 10% steps.
+The x axis shows the labels of the salary ranges, while the y axis features ticks in 10% steps.
 
-Additionally a legend is displayed right to the barchart showing all options included.
+Additionally a legend is displayed right to the barchart showing all options included in the visualization and their color.
 
 ### Bubblechart
-Underneath the barchart is a bubblechart representing all options (e.g. 'male', 'female', 'rather not say') of a category (e.g. 'gender').
+Underneath the barchart is a bubblechart representing all options (e.g. "male", "female" or "rather not say") of a category (e.g. "gender").
 The size of the bubble indicates the distribution within the whole dataset.
 
 ### Overview active filter
 Next to the barchart is a list of currently active filters.
-The purpose is to make it transparent to the user how the visualization is composed.
+Its' purpose is to make the composition of the visualization transparent to the user.
 
-Each item of the list is represented with a small icon, indicating the type of the filter (only show xy or show everything but xy), the category for which the filter is created, as well as the value for which it is active.
+Each item in the list is represented with a small icon, indicating the type of the filter ("only show xy" or "show everything but xy"), the category label for which the filter is created, as well as the value for which it is active.
 Next to it there is a button to quickly remove it.
 
 ### Category Slider
 To change categories, two sliders are implemented - one for the bubblechart and one for the barchart.
-They are placed right above their influencing component.
-Two arrows allow scrolling through the list of categories.
-A click on one of them activates it for the underneath visualization.
+They are placed right above their corresponding component.
+
+Each slider has two arrows, which allow scrolling through the list of available categories.
+A click on one of them activates it for the component underneath.
 The active category is visually marked within the slider.
 
 ## Prototype Interaction
 ### Highlight (Hovereffekt)
-The (sub) bars of the barchart have a hovereffekt, which will change their color to yellow.
+The (sub) bars of the barchart have a hovereffect, which will change their color to yellow.
 
-To allow users to focus on a trend of a single option, a hovereffect is implemented to highlight a single option in the whole visualization.
-This effect is triggered by hovering over the color rectangle of the option in the legend.
+To allow users to focus on a trend of a single option, a hovereffect is implemented to highlight it throughout all salary ranges.
+This effect is triggered by hovering over the color rectangle of the corresponding option in the legend.
 
 ### Details
 Additionally to the hovereffect of the barchart a tooltip was implemented to give a more detailed view (option name and percantage) of the item.
@@ -83,7 +86,7 @@ There are several interaction possibilities regarding filtering.
 
 #### Creating a filter
 This is only possible by clicking on the bubble representing the desired filter value.
-This will highlight it to give feedback about the current state of the visualization.
+It will highlight it to give feedback about the current state of the visualization.
 
 Additionally the newly created filter will also be featured in the filter list.
 
@@ -93,7 +96,7 @@ New filters are always from type "show only xy".
 There are two ways to remove an active filter.
 One is to click on the same bubble again which will toggle it.
 
-The other way is to click on the previously mentioned button in the filter list.
+The other one is to click on the previously mentioned remove button in the filter list.
 
 Currently the application only allows one filter per category, which will result in removing a filter if a new one of the same category is selected.
 
@@ -108,8 +111,9 @@ By clicking on a non-active category in the category slider, the view (barchart 
 The possibilities for data insight of this visualization will be shown with two examples:
 
 *How is the gender distribution among developers depending on their years of experience?*
+
 To answer this question the category of the barchart is set to "Gender", because it's the main aspect we want to investigate.
-The category of the bubblechart will be set to "Experience Range", because it's our secondary aspect, which we want to choose from for filtering.
+The category of the bubblechart will be set to "Experience Range", our secondary aspect, which we want to choose from for filtering.
 
 When playing around with the filters it's easy to see some tendencies.
 First of all it's obvious that women as a whole are totally underrepresented among developers.
@@ -121,7 +125,7 @@ It's also worth noting that even so the percentage of women is very low, it gets
 
 *Is a preference for Star Wars vs. Star Trek having an influence on salary?*
 When looking at the "Star Wars vs. Star Trek" chart it's easy to see that there is a certain popularity rise of Star Trek in the higher salary ranges.
-To explain this we speculated that this can be described by the age distribution and has nothing to do with Star Trek Fans being more successful.
+To explain this we speculated that this can be described by the age distribution and has nothing to do with Star Trek Fans being more successful in their job.
 
 To validate this theory we chose "Age Range" as the category for the bubblechart and experimented with several filters.
-Soon we were able to validate our hypothesis, because we saw that the distribution didn't change with higher income when filtering a certain age range. Therefore the preference of either franchises is correlated to age, which - of course - is correlated with salary.
+Soon we were able to validate our hypothesis, because we saw that the distribution didn't change with higher income when filtering a certain age range. Therefore the preference of either franchises is correlated to age, which - of course - is correlated to salary.
